@@ -1,0 +1,202 @@
+# Copyright 2023 - 2024 California Department of Motor Vehicles
+# Copyright 2023 - 2024 Digital Bazaar, Inc.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+app:
+  express:
+    httpOnly: true
+  server:
+    baseUri: https://18af-47-144-3-92.ngrok-free.app
+  mongodb:
+    url: mongodb://127.0.0.1:27017/opencred
+  opencred:
+    caStore:
+      - pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICPzCCAeWgAwIBAgIUXd0okOOM5cylFwc2WNK7D2O+ArAwCgYIKoZIzj0EAwIw
+          UTELMAkGA1UEBhMCVVMxDjAMBgNVBAgMBVVTLUNBMQ8wDQYDVQQKDAZDQS1ETVYx
+          ITAfBgNVBAMMGENhbGlmb3JuaWEgRE1WIElBQ0EgUm9vdDAeFw0yMzAzMDExNzE3
+          MzlaFw0zMzAxMDcxNzE3MzlaMFExCzAJBgNVBAYTAlVTMQ4wDAYDVQQIDAVVUy1D
+          QTEPMA0GA1UECgwGQ0EtRE1WMSEwHwYDVQQDDBhDYWxpZm9ybmlhIERNViBJQUNB
+          IFJvb3QwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARgzKB5QsRXYGxmIapA3ilL
+          oXCDxgTMI2JArA72VQ9gL2DIKkBAclKYtix7vQwUbhbH76mnmbOFSxYlCJtilfl1
+          o4GaMIGXMB0GA1UdDgQWBBS7fXVnknpvz59ye7gK9zcvnAxQNjASBgNVHRMBAf8E
+          CDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBBjAfBgNVHRIEGDAWgRRpYWNhLXJvb3RA
+          ZG12LmNhLmdvdjAxBgNVHR8EKjAoMCagJKAihiBodHRwczovL2NybC5kbXYuY2Eu
+          Z292L2lhY2Evcm9vdDAKBggqhkjOPQQDAgNIADBFAiAJriK4wEUzgDCK++tIIW+g
+          XASUIIcG/XhBNxuk2uHd7QIhAKWC8LFaM8qFsvlujtZZf647zD8BBc6kicj1Imw/
+          wujS
+          -----END CERTIFICATE-----
+      - pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICeDCCAh+gAwIBAgIUNb1vs9nrIFNkxW/Ah5RbqSk5D48wCgYIKoZIzj0EAwIw
+          UTELMAkGA1UEBhMCVVMxDjAMBgNVBAgMBVVTLUNBMQ8wDQYDVQQKDAZDQS1ETVYx
+          ITAfBgNVBAMMGENhbGlmb3JuaWEgRE1WIElBQ0EgUm9vdDAeFw0yNDAxMjYyMDM5
+          MzlaFw0yNTAxMjUyMDM5MzlaMFYxCzAJBgNVBAYTAlVTMQ4wDAYDVQQIDAVVUy1D
+          QTEPMA0GA1UECgwGQ0EtRE1WMSYwJAYDVQQDDB1DYWxpZm9ybmlhIERNViBJQUNB
+          IFZDIFNpZ25lcjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABN7bkMmpNWsUS3MA
+          l7PcrUkguJMQuPj2nmYaULrAJSN6o46TYiv/hn03CtkVDhIOL3Lot8tVYWBqNPmZ
+          fi96PVKjgc8wgcwwHQYDVR0OBBYEFPjtmX0B60mQQBlRTa+nUMHAHb7EMB8GA1Ud
+          IwQYMBaAFLt9dWeSem/Pn3J7uAr3Ny+cDFA2MB0GCWCGSAGG+EIBDQQQFg5DYWxp
+          Zm9ybmlhIERNVjAOBgNVHQ8BAf8EBAMCB4AwIQYDVR0SBBowGIEWaWFjYS1zaWdu
+          ZXJAZG12LmNhLmdvdjA4BgNVHR8EMTAvMC2gK6AphidodHRwczovL2NybC5kbXYu
+          Y2EuZ292L2lhY2EvbWRvYy1zaWduZXIwCgYIKoZIzj0EAwIDRwAwRAIgMsZMt2+6
+          92d8o3ndNSyLWGcGhKcNaDVFgzh6NVZez8ICIApUEIiGIflkIAAkuxgepibKAYT8
+          +Z4B8u20Qusl/PH/
+          -----END CERTIFICATE-----
+    signingKeys:
+      - type: ES256
+        id: 8a5ddd0855a8ec6bb59dcc021d7443440709c262631d727e1430cc1aaa539c91
+        privateKeyPem: |
+          -----BEGIN PRIVATE KEY-----
+          MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg6Ad2Mx56RQk5XKjH
+          zrUssKT/+pg12WrX6HAO0CTONXChRANCAAQIcIh78me7FkIsBtrlM0B5yAXnF/R5
+          YVlHexPx+bHW17xF41GjdCfk0wtRY9LgiSnDIUVNUF/wTwFNPg90RNdw
+          -----END PRIVATE KEY-----
+        publicKeyPem: |
+          -----BEGIN PUBLIC KEY-----
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECHCIe/JnuxZCLAba5TNAecgF5xf0
+          eWFZR3sT8fmx1te8ReNRo3Qn5NMLUWPS4IkpwyFFTVBf8E8BTT4PdETXcA==
+          -----END PUBLIC KEY-----
+        purpose:
+          - id_token
+          - authorization_request
+    relyingParties:
+      - name: "Unmio web - Relying Party (Native)"
+        clientId: "yLveQu05trOCR1XoPhIJI0Lc9"
+        clientSecret: "johanospu0uyahEcHewr8tebr"
+        description: "Unmio web - Relying Party Test App"
+        primaryLogo: "https://cdn.prod.website-files.com/6674f7a53c8fdfc828f751c3/66765b1df943d315821e0238_Unmio_Logo_Green-ColorBack%20(3).png"
+        primaryLink: "https://www.unmio.com"
+        secondaryLogo: "https://cdn.prod.website-files.com/6606261f792da7133f2e17b4/66064c38eaed3fe8151dab30_Entidad-Logo-Black%201.png"
+        secondaryLink: "https://www.entidad.io"
+        homeLink: "https://www.unmio.com/mDL-demo-home"
+        explainerVideo:
+          id: "<YOUTUBE ID>"
+          provider: youtube
+        backgroundImage: "https://placekitten.com/800/200"
+        redirectUri: "https://www.unmio.com/mDL-demo-redirect-here"
+        idTokenExpirySeconds: 3600
+        claims:
+          - name: "dl_number"
+            path: "driversLicense.document_number"
+        brand:
+          cta: "#622C6D"
+          primary: "#421E48"
+          header: "#1C7D77"
+        scopes:
+          - name: "openid"
+            description: "Open ID Connect"
+        workflow:
+          type: native
+          id: CReB5ef6lPaMixep4Fuchucek
+          initialStep: default
+          steps:
+            default:
+              createChallenge: true
+              verifiablePresentationRequest: >
+                {
+                  "query": {
+                    "type": "QueryByExample",
+                    "credentialQuery": {
+                      "reason": "Please present your VC.",
+                      "example": {
+                        "type": [
+                          "Iso18013DriversLicenseCredential"
+                        ]
+                      }
+                    }
+                  }
+                }
+              constraintsOverride: >
+                {
+                  "fields": [
+                    {
+                      "path": [
+                        "$.vc.type"
+                      ],
+                      "filter": {
+                        "type": "string",
+                        "pattern": "Iso18013DriversLicenseCredential"
+                      }
+                    }
+                  ]
+                }
+    options:
+      exchangeProtocols:
+        - openid4vp
+        - chapi
+    defaultBrand:
+      cta: "#622C6D"
+      primary: "#421E48"
+      header: "#1C7D77"
+    audit:
+      enable: true
+      fields:
+        - type: text
+          id: given_name
+          name: First Name
+          path: "$.credentialSubject.given_name"
+          required: true
+        - type: text
+          id: family_name
+          name: Last Name
+          path: "$.credentialSubject.family_name"
+          required: false
+        - type: date
+          id: birth_date
+          name: Date of Birth
+          path: "$.credentialSubject.birth_date"
+          required: true
+        - type: number
+          id: height
+          name: Height (cm)
+          path: "$.credentialSubject.height"
+          required: false
+        - type: dropdown
+          id: sex
+          name: Sex
+          path: "$.credentialSubject.sex"
+          required: false
+          options:
+            "Male": 1
+            "Female": 2
+        - type: dropdown
+          id: senior_citizen
+          name: Are you a senior citizen?
+          path: "$.credentialSubject.senior_citizen"
+          required: true
+          options:
+            "Yes": 1
+            "No": null
+          default: "No"
+    reCaptcha:
+      enable: true
+      version: 2
+      siteKey: h7speg4chowUF83lPRO8eST5kimeC8Frlsl7isP0
+      secretKey: XufIklM8hlF5z0SPlPlfos8acuqeFragadozA940
+      pages:
+        - audit
+    defaultLanguage: en
+    translations:
+      en:
+        qrTitle: Login with your Wallet app
+        qrPageExplain: Scan the following QR Code using the Wallet app on your phone.
+        qrPageExplainHelp: (<a href="https://youtube.com">How do I do it?</a>)
+        qrFooter: "Note: Already on your phone with the Wallet app? Open the Wallet app, then come back and tap on the QR code above."
+        qrFooterHelp: Difficulty using the Wallet app to login? revert to using password <a href="#">here</a>
+        qrDisclaimer: If you don't have a Wallet app download it from the app store.
+        qrExplainerText: (How do I do it?)
+        openid4vpAnotherWay: "Scan a QR code"
+        chapiPageAnotherWay: "Looking for a QR code to scan with your wallet app instead?"
+        loginCta: "Login with your credential wallet"
+        loginExplain: "To login with your credential wallet, you will need to have the credential wallet app <with configurable URL to app stores> installed"
+        appInstallExplain: "If you don't have a credential wallet yet, you can get one by downloading the credential wallet app <with configurable URL to app stores>"
+        appCta: "Open wallet app"
+        copyright: "Powered by OpenCred"
+        pageTitle: "Login"
+        home: "Home"
+        verificationSuccess: Success!
+    didWeb:
+      mainEnabled: true

@@ -1,0 +1,223 @@
+# Copyright 2023 - 2024 California Department of Motor Vehicles
+# Copyright 2023 - 2024 Digital Bazaar, Inc.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+app:
+  server:
+    baseUri: http://192.168.4.56:22080
+  opencred:
+    signingKeys:
+      - type: ES256
+        id: 7e3e12c3765c3a38e507fbe894e9a59f9d6ab3024d4b61d0566568644b1f76e8
+        privateKeyPem: |
+          -----BEGIN PRIVATE KEY-----
+          MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgnlzfNYvLnX8vzsoi
+          SPAfX+spiakXOMRnPQbE7jf/Pv+hRANCAARyjT3IgrOgOyaGxtHhrFYKjfYe6PeJ
+          U+oZegGG3+wU2zEiwo5CzCU1vj5JM4noO35ixfXR4vOks/fSGtclNwtI
+          -----END PRIVATE KEY-----
+        publicKeyPem: |
+          -----BEGIN PUBLIC KEY-----
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEco09yIKzoDsmhsbR4axWCo32Huj3
+          iVPqGXoBht/sFNsxIsKOQswlNb4+STOJ6Dt+YsX10eLzpLP30hrXJTcLSA==
+          -----END PUBLIC KEY-----
+        purpose:
+          - id_token
+          - authorization_request
+    relyingParties:
+      - name: "Test Relying Party (Native)"
+        clientId: "rp1"
+        clientSecret: "DeepestAndDarkest"
+        description: "Relying Party Test App"
+        primaryLogo: "https://placekitten.com/200/200"
+        primaryLink: "https://example.com"
+        secondaryLogo: "https://placekitten.com/200/200"
+        secondaryLink: "https://example2.com"
+        homeLink: "https://example.com"
+        explainerVideo:
+          id: "<YOUTUBE ID>"
+          provider: youtube
+        backgroundImage: "https://placekitten.com/800/200"
+        redirectUri: "http://localhost:3000"
+        idTokenExpirySeconds: 3600
+        claims:
+          - name: "dl_number"
+            path: "driversLicense.document_number"
+        brand:
+          cta: "#0B669D"
+          primary: "#045199"
+          header: "#0979c4"
+        scopes:
+          - name: "openid"
+            description: "Open ID Connect"
+        workflow:
+          type: native
+          id: z1A32xJZGqBeAEcMq56avmw2L
+          untrustedVariableAllowList:
+            - exampleParam
+            - exampleParam2
+          initialStep: default
+          steps:
+            default:
+              callback:
+                url: http://localhost:9000/callback
+                headersVariable: callbackHeaders
+                oauth:
+                  issuer: http://example.com
+                  token_url: http://example.com/token
+                  client_secret: exampleClientSecret
+                  client_id: exampleClientId
+                  scope:
+                    - default
+              createChallenge: true
+              verifiablePresentationRequest: >
+                {
+                  "query": {
+                    "type": "QueryByExample",
+                    "credentialQuery": {
+                      "reason": "Please present your VC.",
+                      "example": {
+                        "type": [
+                          "Iso18013DriversLicenseCredential"
+                        ]
+                      }
+                    }
+                  }
+                }
+              constraintsOverride: >
+                {
+                  "fields": [
+                    {
+                      "path": [
+                        "$.vc.type"
+                      ],
+                      "filter": {
+                        "type": "string",
+                        "pattern": "Iso18013DriversLicenseCredential"
+                      }
+                    }
+                  ]
+                }
+      - name: "Test App"
+        # An example that uses a remove VC-API exchanger to connect with a wallet
+        # See Verifiable Credentials API Documentation: https://w3c-ccg.github.io/vc-api/
+        clientId: "32bb6cec384b"
+        clientSecret: "DeepestAndDarkest"
+        description: "Relying Party Test App"
+        icon: "https://placekitten.com/200/200"
+        backgroundImage: "https://placekitten.com/800/300"
+        idTokenExpirySeconds: 3600
+        brand:
+          cta: "#0B669D"
+          primary: "#045199"
+          header: "#0979c4"
+        redirectUri: "http://localhost:3000"
+        scopes:
+          - name: "openid"
+            description: "Open ID Connect"
+        claims:
+          - name: "email"
+            path: "email"
+        workflow:
+          type: vc-api
+          baseUrl: https://example.org/exchanges/123
+          capability: "example"
+          clientSecret: "example"
+      - clientId: 4e3a8b7b4b7b4b7b4b7b
+        # Microsoft Entra Verified Id workflow config
+        # Many of these config fields map to request fields in the APIs linked below:
+        #   https://learn.microsoft.com/en-us/entra/verified-id/get-started-request-api
+        #   https://learn.microsoft.com/en-us/entra/verified-id/presentation-request-api
+        configFrom: 32bb6cec384b # clientId of another relying party to serve as default values
+        workflow:
+          type: microsoft-entra-verified-id
+          apiBaseUrl: https://api.entra.microsoft.example.com/v1.0 # required (will generally be https://verifiedid.did.msidentity.com/v1.0)
+          apiLoginBaseUrl: https://login.entra.microsoft.example.com # required (will generally be https://login.microsoftonline.com)
+          apiClientId: "TODO" # required
+          apiClientSecret: "TODO" # required
+          apiTenantId: "TODO" # required
+          verifierDid: "TODO" # required
+          verifierName: "TODO" # required
+          acceptedCredentialIssuers: [] # optional (default populated in middleware unless overridden here)
+          credentialVerificationPurpose: "So that we can evaluate your permission to access the requested resource" # optional (default populated in middleware unless overridden here)
+          allowRevokedCredentials: false # optional (default populated in middleware unless overridden here)
+          validateLinkedDomain: false # optional (default populated in middleware unless overridden here)
+          includeQrCode: true # optional (default populated in middleware unless overridden here)
+          initialStep: default
+          steps:
+            default:
+              acceptedCredentialType: "TODO" # required
+    options:
+      exchangeProtocols:
+        - chapi
+        - openid4vp
+    defaultBrand:
+      cta: "#0B669D"
+      primary: "#045199"
+      header: "#0979c4"
+    audit:
+      enable: true
+      fields:
+        - type: text
+          id: given_name
+          name: First Name
+          path: "$.credentialSubject.given_name"
+          required: true
+        - type: text
+          id: family_name
+          name: Last Name
+          path: "$.credentialSubject.family_name"
+          required: false
+        - type: date
+          id: birth_date
+          name: Date of Birth
+          path: "$.credentialSubject.birth_date"
+          required: true
+        - type: number
+          id: height
+          name: Height (cm)
+          path: "$.credentialSubject.height"
+          required: false
+        - type: dropdown
+          id: sex
+          name: Sex
+          path: "$.credentialSubject.sex"
+          required: false
+          options:
+            "Male": 1
+            "Female": 2
+        - type: dropdown
+          id: senior_citizen
+          name: Are you a senior citizen?
+          path: "$.credentialSubject.senior_citizen"
+          required: true
+          options:
+            "Yes": 1
+            "No": null
+          default: "No"
+    reCaptcha:
+      enable: true
+      version: 2
+      siteKey: 6LcNDSjdAAAAAAAAIe2uy0gavf0reiuhfer12345
+      secretKey: 6LcNDSjdAAAAAAAAIe3uy1gavf1reiuhfer67890
+      pages:
+        - audit
+    defaultLanguage: en
+    translations:
+      en:
+        qrTitle: Login with your Wallet app
+        qrPageExplain: Scan the following QR Code using the Wallet app on your phone.
+        qrPageExplainHelp: (<a href="https://youtube.com">How do I do it?</a>)
+        qrFooter: "Note: Already on your phone with the Wallet app? Open the Wallet app, then come back and tap on the QR code above."
+        qrFooterHelp: Difficulty using the Wallet app to login? revert to using password <a href="#">here</a>
+        qrDisclaimer: If you don't have a Wallet app download it from the app store.
+        qrExplainerText: (How do I do it?)
+        chapiPageAnotherWay: "Looking for a QR Code to scan with you wallet app instead?"
+        loginCta: "Login with your credential wallet"
+        loginExplain: "To login with your credential wallet, you will need to have the credential wallet app <with configurable URL to app stores> installed"
+        appInstallExplain: "If you don't have a credential wallet yet, you can get one by downloading the credential wallet app <with configurable URL to app stores>"
+        appCta: "Open wallet app"
+        copyright: "Powered by OpenCred"
+        pageTitle: "Login"
+        home: "Home"
+        verificationSuccess: "Success! Your credential has been shared."

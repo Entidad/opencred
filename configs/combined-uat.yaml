@@ -1,0 +1,137 @@
+# Copyright 2023 - 2024 California Department of Motor Vehicles
+# Copyright 2023 - 2024 Digital Bazaar, Inc.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+app:
+  express:
+    httpOnly: true
+  server:
+    baseUri: https://10ed-47-144-3-92.ngrok-free.app
+  mongodb:
+    url: mongodb://127.0.0.1:27017/opencred
+  opencred:
+    caStore:
+      - pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICLjCCAdSgAwIBAgIUXrDPrioY9PCUO5hCXJTsVIZwI0cwCgYIKoZIzj0EAwIw
+          UDELMAkGA1UEBhMCVVMxDjAMBgNVBAgMBVVTLUNBMQwwCgYDVQQKDANETVYxIzAh
+          BgNVBAMMGkNhbGlmb3JuaWEgRE1WIFJvb3QgQ0EgVUFUMB4XDTIzMDQxNDE3MjQ0
+          N1oXDTMzMDIyMDE3MjQ0N1owUDELMAkGA1UEBhMCVVMxDjAMBgNVBAgMBVVTLUNB
+          MQwwCgYDVQQKDANETVYxIzAhBgNVBAMMGkNhbGlmb3JuaWEgRE1WIFJvb3QgQ0Eg
+          VUFUMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEORXa3DGvoGS0s6S71Vw5oKEw
+          DdPubWyg75A2p1hca4b66MA0LXUWjoz1cIKUJpyEket9ajEx5+hQvB3yvycKVqOB
+          izCBiDAdBgNVHQ4EFgQUSWhCfS8C3wEPseC28ScmFn0j25UwEgYDVR0TAQH/BAgw
+          BgEB/wIBADALBgNVHQ8EBAMCAQYwHQYDVR0SBBYwFIESZXhhbXBsZUBkbXYuY2Eu
+          Z292MCcGA1UdHwQgMB4wHKAaoBiGFmh0dHBzOi8vZG12LmNhLmdvdi9jcmwwCgYI
+          KoZIzj0EAwIDSAAwRQIgbpRE08g3aId6e2QULkmlTqnGq0+6kqLltHfjmO6/5MEC
+          IQDJdY3WnkpFhPw+Ej3ANlFzwvaDgfaacODGR0pFvBQwlg==
+          -----END CERTIFICATE-----
+    signingKeys:
+      - type: ES256
+        id: c83b2df006241b896d0c3d35b75d5405ed4913e7e2197a5b737f593a362b78b3
+        privateKeyPem: |
+          -----BEGIN PRIVATE KEY-----
+          MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgEaG1ZvzZ8fwX9OJE
+          HUAQ7q6GseHxF775FB3edv+3T8+hRANCAATbEkvbU5sOBvGZ8gZiw8Fp5nGOs2FC
+          /+g04mhVuaZzldq/cyisjv/wN6Iqs5cSnUxbaYyH5WKOIdboO6m94ZbB
+          -----END PRIVATE KEY-----
+        publicKeyPem: |
+          -----BEGIN PUBLIC KEY-----
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2xJL21ObDgbxmfIGYsPBaeZxjrNh
+          Qv/oNOJoVbmmc5Xav3MorI7/8DeiKrOXEp1MW2mMh+VijiHW6DupveGWwQ==
+          -----END PUBLIC KEY-----
+        purpose:
+          - id_token
+          - authorization_request
+    relyingParties:
+      - name: "Unmio web (LOCALDEV)"
+        clientId: "swlGeyewruspigime4pata0hlY846ayi"
+        clientSecret: "ChOTHlHEGeBRuylsisTAFrlqlcAJEdo4"
+        description: "Relying Party Test App"
+        primaryLogo: "https://placekitten.com/200/200"
+        primaryLink: "https://example.com"
+        secondaryLogo: "https://placekitten.com/200/200"
+        secondaryLink: "https://example2.com"
+        homeLink: "https://example.com"
+        explainerVideo:
+          id: "<YOUTUBE ID>"
+          provider: youtube
+        backgroundImage: "https://placekitten.com/800/200"
+        redirectUri: "https://example.com"
+        idTokenExpirySeconds: 3600
+        claims:
+          - name: "dl_number"
+            path: "driversLicense.document_number"
+        brand:
+          cta: "#0B669D"
+          primary: "#045199"
+          header: "#0979c4"
+        scopes:
+          - name: "openid"
+            description: "Open ID Connect"
+        workflow:
+          type: native
+          id: z1A32xJZGqBeAEcMq56avmw2L
+          initialStep: default
+          steps:
+            default:
+              createChallenge: true
+              verifiablePresentationRequest: >
+                {
+                  "query": {
+                    "type": "QueryByExample",
+                    "credentialQuery": {
+                      "reason": "Please present your VC.",
+                      "example": {
+                        "type": [
+                          "Iso18013DriversLicenseCredential"
+                        ]
+                      }
+                    }
+                  }
+                }
+              constraintsOverride: >
+                {
+                  "fields": [
+                    {
+                      "path": [
+                        "$.vc.type"
+                      ],
+                      "filter": {
+                        "type": "string",
+                        "pattern": "Iso18013DriversLicenseCredential"
+                      }
+                    }
+                  ]
+                }
+    options:
+      exchangeProtocols:
+        - openid4vp
+        - chapi
+    defaultBrand:
+      cta: "#0B669D"
+      primary: "#045199"
+      header: "#0979c4"
+    defaultLanguage: en
+    translations:
+      en:
+        qrTitle: Login with your Wallet app
+        qrPageExplain: Scan the following QR Code using the Wallet app on your phone.
+        qrPageExplainHelp: (<a href="https://youtube.com">How do I do it?</a>)
+        qrFooter: "Note: Already on your phone with the Wallet app? Open the Wallet app, then come back and tap on the QR code above."
+        qrFooterHelp: Difficulty using the Wallet app to login? revert to using password <a href="#">here</a>
+        qrDisclaimer: If you don't have a Wallet app download it from the app store.
+        qrExplainerText: (How do I do it?)
+        openid4vpAnotherWay: "Scan a QR code"
+        chapiPageAnotherWay: "Looking for a QR code to scan with your wallet app instead?"
+        loginCta: "Login with your credential wallet"
+        loginExplain: "To login with your credential wallet, you will need to have the credential wallet app <with configurable URL to app stores> installed"
+        appInstallExplain: "If you don't have a credential wallet yet, you can get one by downloading the credential wallet app <with configurable URL to app stores>"
+        appCta: "Open wallet app"
+        copyright: "Powered by OpenCred"
+        pageTitle: "Login"
+        home: "Home"
+        verificationSuccess: Success!
+    didWeb:
+      mainEnabled: true
